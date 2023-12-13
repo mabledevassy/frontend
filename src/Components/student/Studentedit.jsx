@@ -1,32 +1,29 @@
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import EditIcon from '@mui/icons-material/Edit';
-import Studentedit from './Studentedit';
+import axios from 'axios'
+import React, { useState } from 'react'
 
+const Studentedit = (props) => {
+    var[inputs,setInputs]=useState(props.data)
+    const inputHandler=(event)=>
+    {
 
-const Studentdetails = () => {
-    var[selected,setSelected]=useState();
-    var[update,setUpdate]=useState(false);
-    var [student, setStudent] = useState([]);
-
-   useEffect(()=>{
-    axios.get("http://localhost:3005/view")
-    .then(response => {
-        console.log("dkjhdg")
-           setStudent(response.data)
-           console.log(response.data)
-    })
-    .catch(err => console.log(err))
-   },[])
-
-   const updateValues=(row)=>{
-    setSelected(row)
-    setUpdate(true)
-   }
-    var result=
-        <div>
-            <TableContainer component={Paper}>
+        const { name, value } = event.target
+        setInputs((inputs) => ({ ...inputs, [name]: value }))
+        console.log(inputs)
+    }
+    const addHandler=()=>{
+        if(props.method==="put")
+        {
+            axios.put("http://localhost:3005/edit/"+inputs._id,inputs)
+            .then(response=>{
+                alert("Record updated")
+                window.location.reload(false);
+            })
+            .catch(err=>console.log(err))
+        }
+    }
+  return (
+    <div>
+      <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
@@ -47,17 +44,15 @@ const Studentdetails = () => {
                                     <TableCell >{row.Name}</TableCell>
                                     <TableCell>{row.Age}</TableCell>
                                     <TableCell >{row.Course}</TableCell>
-                                    <TableCell><EditIcon onClick={()=>updateValues(row)}/></TableCell>
+                                   
                                 </TableRow>
                             )
                         })}
                     </TableBody>
                 </Table>
             </TableContainer>
-        </div>
-    if(update)
-    result=<Studentedit data={selected}method='put'/>
-    return (result)
+    </div>
+  )
 }
 
-export default Studentdetails
+export default Studentedit
