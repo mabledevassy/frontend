@@ -7,8 +7,8 @@ const Studentedit = (props) => {
     const inputHandler=(event)=>
     {
 
-        const { name, value } = event.target
-        setInputs((inputs) => ({ ...inputs, [name]: value }))
+        const { name, value } =event.target
+        setInputs((inputs) => ({ ...inputs,[name]: value }))
         console.log(inputs)
     }
     const addHandler=()=>{
